@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ganymede Position Calculator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: grid;
+            gap: 10px;
+        }
+        input[type="number"], input[type="submit"] {
+            width: 100%;
+            padding: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ganymede Position Calculator</h1>
+    <form id="ganymede-form">
+        <label for="day">Enter current day (dd):</label>
+        <input type="number" id="day" name="day" required step="any">
+
+        <label for="time">Enter time (24-hour format, e.g., 15.5 for 3:30 PM):</label>
+        <input type="number" id="time" name="time" required step="0.01" min="0" max="23.59">
+
+        <label for="month">Enter current month (mm):</label>
+        <input type="number" id="month" name="month" required min="1" max="12">
+
+        <label for="year">Enter current year (yyyy):</label>
+        <input type="number" id="year" name="year" required min="2024">
+
+        <input type="submit" value="Calculate">
+    </form>
+    <div id="result"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#ganymede-form').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/calculate',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#result').text(response);
+                    },
+                    error: function() {
+                        $('#result').text('An error occurred. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
